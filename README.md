@@ -50,6 +50,10 @@ webcam or video
 
 The goal is visible, demonstrable imitation rather than perfect humanoid whole-body control.
 
+## Demo Video
+
+YouTube demo: [https://youtu.be/1VA9xJVq1II](https://youtu.be/1VA9xJVq1II)
+
 ## Project Layout
 
 ```text

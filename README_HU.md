@@ -50,6 +50,10 @@ webkamera vagy videó
 
 A cél nem a tökéletes humanoid vezérlés, hanem egy stabilan bemutatható, látványos real2sim pipeline.
 
+## Demó videó
+
+YouTube demó: [https://youtu.be/1VA9xJVq1II](https://youtu.be/1VA9xJVq1II)
+
 ## Hogyan működik?
 
 A rendszer három fő részből áll.
