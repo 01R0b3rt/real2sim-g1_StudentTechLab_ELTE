@@ -1,8 +1,8 @@
 REAL2SIM G1 DEMO VIDEO SZKRIPT
-SZTAKI / TTAH 2026
+SZTAKI Robot Competition 2026
 
 Javasolt videohossz: 2:30 - 3:30 perc
-Javasolt fajlnev: real2sim_g1_demo_TTAH2026.mp4
+Javasolt fajlnev: real2sim_g1_demo_SZTAKI2026.mp4
 
 Cel:
 Egyetlen osszevagott demo video, amely eloszor a stabil ketkaros beadando megoldast mutatja, utana roviden a teljes testes kiserleti bovitest.
@@ -36,7 +36,7 @@ Cim / nyito kep
 Kepernyon:
 Real2Sim G1
 Camera-based human arm imitation in MuJoCo
-SZTAKI / TTAH 2026
+SZTAKI Robot Competition 2026
 Student Tech Lab ELTE
 
 Narracio:
@@ -240,7 +240,7 @@ Title:
 Real2Sim G1 - Camera-based two-arm imitation in MuJoCo
 
 Description:
-This project demonstrates a Python real2sim MVP for the SZTAKI / TTAH 2026 task. A camera observes human motion, MediaPipe extracts pose landmarks, an approximate retargeting module maps human arm motion to a Unitree G1 MuJoCo model, and an OpenClaw-compatible command wrapper exposes demo commands. The stable submission mode imitates both human arms. An experimental stereo full-body extension demonstrates torso, squat, and leg motion.
+This project demonstrates a Python real2sim MVP for the SZTAKI Robot Competition 2026 task. A camera observes human motion, MediaPipe extracts pose landmarks, an approximate retargeting module maps human arm motion to a Unitree G1 MuJoCo model, and an OpenClaw-compatible command wrapper exposes demo commands. The stable submission mode imitates both human arms. An experimental stereo full-body extension demonstrates torso, squat, and leg motion.
 
 
 7. GYORS PARANCSSOROK A VIDEOHOZ
@@ -259,4 +259,3 @@ Stabil ketkaros demo:
 
 Teljes test kiserleti demo:
 .\START_FULL_BODY.bat
-
