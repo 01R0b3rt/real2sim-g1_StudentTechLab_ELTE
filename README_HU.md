@@ -99,7 +99,15 @@ Friss letöltés után indítsd ezt:
 
 Ez létrehozza a Python virtuális környezetet, telepíti a függőségeket, letölti a Unitree MuJoCo asseteket, majd lefuttat egy státuszellenőrzést.
 
-Ezután indítsd a demómenüt:
+Ezután ellenőrizd a kamerákat, és ha a kétkamerás teljes testes módot is használni szeretnéd, futtasd le a kalibrációs menüt:
+
+```powershell
+.\CALIBRATION_MENU.bat
+```
+
+A stabil kétkaros demóhoz elég egy jól működő kamera. A teljes testes stereo módhoz a kameraállás után kalibrálni kell, különben a mélység és a láb/törzs mozgás pontatlan lehet.
+
+Ha a kamera és kalibráció rendben van, indítsd a demómenüt:
 
 ```powershell
 .\START_DEMO.bat
@@ -200,39 +208,6 @@ Futás közbeni vezérlés:
 ESC vagy q  kilépés
 c           neutrális póz újrakalibrálása az aktuális emberi pózból
 ```
-
-## Beadási indítók
-
-Közvetlen Windows indítók:
-
-```powershell
-.\START_ARMS_ONLY.bat
-.\START_FULL_BODY.bat
-```
-
-`START_ARMS_ONLY.bat`: a stabil kétkaros utánzást indítja a `configs/g1_arm_mapping_STABLE_ARMS.yaml` beállítással. Ez a legbiztosabb beadási verzió.
-
-`START_FULL_BODY.bat`: a kísérleti teljes testes módot indítja törzs-, láb-, guggolás-, előrehajlás- és vizuális helyváltoztatás-támogatással.
-
-Menüs indító:
-
-```powershell
-.\START_DEMO.bat
-```
-
-## OpenClaw parancsréteg
-
-A `src/openclaw_real2sim_tool.py` egy minimális OpenClaw-kompatibilis wrapper. Egységes parancsokat ad a rendszerhez:
-
-```bash
-python src/openclaw_real2sim_tool.py status
-python src/openclaw_real2sim_tool.py start --camera 0
-python src/openclaw_real2sim_tool.py calibrate --camera 0
-python src/openclaw_real2sim_tool.py run-demo --camera 0
-python src/openclaw_real2sim_tool.py record-demo --camera 0 --output media/demo_output.mp4
-```
-
-A `status` parancs ellenőrzi a Python csomagokat, a config fájlt, a G1 XML útvonalat és a kamerát.
 
 ## Kamera keresése és beállítása
 
@@ -339,6 +314,39 @@ Kísérleti teljes testes stereo demó:
 ```bash
 python src/openclaw_real2sim_tool.py run-demo --stereo --full-body --locomotion-demo --stereo-config configs/stereo_calibration.yaml --left-camera 0 --right-camera 1 --display-scale 0.5
 ```
+
+## Beadási indítók
+
+Közvetlen Windows indítók:
+
+```powershell
+.\START_ARMS_ONLY.bat
+.\START_FULL_BODY.bat
+```
+
+`START_ARMS_ONLY.bat`: a stabil kétkaros utánzást indítja a `configs/g1_arm_mapping_STABLE_ARMS.yaml` beállítással. Ez a legbiztosabb beadási verzió.
+
+`START_FULL_BODY.bat`: a kísérleti teljes testes módot indítja törzs-, láb-, guggolás-, előrehajlás- és vizuális helyváltoztatás-támogatással.
+
+Menüs indító:
+
+```powershell
+.\START_DEMO.bat
+```
+
+## OpenClaw parancsréteg
+
+A `src/openclaw_real2sim_tool.py` egy minimális OpenClaw-kompatibilis wrapper. Egységes parancsokat ad a rendszerhez:
+
+```bash
+python src/openclaw_real2sim_tool.py status
+python src/openclaw_real2sim_tool.py start --camera 0
+python src/openclaw_real2sim_tool.py calibrate --camera 0
+python src/openclaw_real2sim_tool.py run-demo --camera 0
+python src/openclaw_real2sim_tool.py record-demo --camera 0 --output media/demo_output.mp4
+```
+
+A `status` parancs ellenőrzi a Python csomagokat, a config fájlt, a G1 XML útvonalat és a kamerát.
 
 ## Konfiguráció
 

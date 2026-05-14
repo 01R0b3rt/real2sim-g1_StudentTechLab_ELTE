@@ -89,7 +89,15 @@ After cloning or downloading the repository, run:
 
 This creates `.venv`, installs Python dependencies, downloads the Unitree MuJoCo assets into `assets/unitree_mujoco`, and runs a status check.
 
-Then run the demo launcher:
+Then check the cameras. If the two-camera full-body mode will be used, run the calibration menu before starting the demo:
+
+```powershell
+.\CALIBRATION_MENU.bat
+```
+
+The stable two-arm demo only needs one working camera. The stereo full-body mode should be calibrated after the cameras are placed, otherwise depth, leg, and torso motion can be inaccurate.
+
+After camera setup and calibration, run the demo launcher:
 
 ```powershell
 .\START_DEMO.bat
@@ -190,39 +198,6 @@ Useful runtime controls:
 ESC or q  quit
 c         recalibrate neutral pose from the current human pose
 ```
-
-## Submission Launchers
-
-The project includes two direct Windows launchers:
-
-```powershell
-.\START_ARMS_ONLY.bat
-.\START_FULL_BODY.bat
-```
-
-`START_ARMS_ONLY.bat` uses `configs/g1_arm_mapping_STABLE_ARMS.yaml` and runs only the stable two-arm imitation. This is the safest version for the final submission.
-
-`START_FULL_BODY.bat` uses `configs/g1_arm_mapping.yaml` and enables the experimental waist, leg, squat, bend, and visual locomotion mode.
-
-The menu launcher is:
-
-```powershell
-.\START_DEMO.bat
-```
-
-## OpenClaw Wrapper
-
-`src/openclaw_real2sim_tool.py` is a minimal OpenClaw-compatible command wrapper. It exposes stable CLI commands that call the underlying Python app:
-
-```bash
-python src/openclaw_real2sim_tool.py status
-python src/openclaw_real2sim_tool.py start --camera 0
-python src/openclaw_real2sim_tool.py calibrate --camera 0
-python src/openclaw_real2sim_tool.py run-demo --camera 0
-python src/openclaw_real2sim_tool.py record-demo --camera 0 --output media/demo_output.mp4
-```
-
-The `status` command checks Python package availability, the config file, the configured G1 XML path, and the configured camera.
 
 ## Camera Selection And Setup
 
@@ -329,6 +304,39 @@ Run the experimental stereo full-body demo:
 ```bash
 python src/openclaw_real2sim_tool.py run-demo --stereo --full-body --locomotion-demo --stereo-config configs/stereo_calibration.yaml --left-camera 0 --right-camera 1 --display-scale 0.5
 ```
+
+## Submission Launchers
+
+The project includes two direct Windows launchers:
+
+```powershell
+.\START_ARMS_ONLY.bat
+.\START_FULL_BODY.bat
+```
+
+`START_ARMS_ONLY.bat` uses `configs/g1_arm_mapping_STABLE_ARMS.yaml` and runs only the stable two-arm imitation. This is the safest version for the final submission.
+
+`START_FULL_BODY.bat` uses `configs/g1_arm_mapping.yaml` and enables the experimental waist, leg, squat, bend, and visual locomotion mode.
+
+The menu launcher is:
+
+```powershell
+.\START_DEMO.bat
+```
+
+## OpenClaw Wrapper
+
+`src/openclaw_real2sim_tool.py` is a minimal OpenClaw-compatible command wrapper. It exposes stable CLI commands that call the underlying Python app:
+
+```bash
+python src/openclaw_real2sim_tool.py status
+python src/openclaw_real2sim_tool.py start --camera 0
+python src/openclaw_real2sim_tool.py calibrate --camera 0
+python src/openclaw_real2sim_tool.py run-demo --camera 0
+python src/openclaw_real2sim_tool.py record-demo --camera 0 --output media/demo_output.mp4
+```
+
+The `status` command checks Python package availability, the config file, the configured G1 XML path, and the configured camera.
 
 ## Configuration
 
