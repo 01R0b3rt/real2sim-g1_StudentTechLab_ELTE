@@ -321,6 +321,14 @@ If a robot joint moves in the wrong direction, adjust `retargeting.signs` or `re
 
 More detail is available in [docs/limitations.md](docs/limitations.md).
 
+## Author
+
+StudentTechLab ELTE
+
+GitHub: [01R0b3rt](https://github.com/01R0b3rt)
+
+Project repository: [real2sim-g1_StudentTechLab_ELTE](https://github.com/01R0b3rt/real2sim-g1_StudentTechLab_ELTE)
+
 ## License
 
 This repository includes a Creative Commons Attribution 4.0 International license notice in [LICENSE](LICENSE), as requested by the competition. Documentation, diagrams, and demo materials are intended to be CC BY 4.0 licensed. Creative Commons is not the usual first choice for source code licensing, but the project is marked this way to satisfy the competition deliverable.

@@ -337,6 +337,14 @@ Ha egy ízület fordítva mozog, a `retargeting.signs` vagy `retargeting.offsets
 
 Részletesebb lista: [docs/limitations.md](docs/limitations.md).
 
+## Szerző
+
+StudentTechLab ELTE
+
+GitHub: [01R0b3rt](https://github.com/01R0b3rt)
+
+Projekt repó: [real2sim-g1_StudentTechLab_ELTE](https://github.com/01R0b3rt/real2sim-g1_StudentTechLab_ELTE)
+
 ## Licenc
 
 A repó Creative Commons Attribution 4.0 International licencértesítést tartalmaz a [LICENSE](LICENSE) fájlban, mert a verseny ezt kérte. A dokumentáció, diagramok és demóanyagok CC BY 4.0 jelölést kapnak. A Creative Commons nem ideális forráskódlicenc, de a projekt így teljesíti a verseny által kért licencmegjelölést.
