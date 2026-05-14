@@ -50,7 +50,57 @@ webcam or video
 
 The goal is visible, demonstrable imitation, not perfect humanoid whole-body control. The MVP tracks both human arms, computes approximate shoulder pitch, shoulder roll, and elbow flexion, then applies those targets to a Unitree G1 MuJoCo model.
 
-## Project Layout
+## Magyar gyors útmutató
+
+Röviden: a projekt célja, hogy kameraképből felismerje az ember mozgását, ebből kiszámolja a karok és a kísérleti teljes testes mód főbb szögeit, majd ezeket a Unitree G1 MuJoCo modellre küldje. A hangsúly nem a tökéletes robotdinamikán van, hanem azon, hogy a zsűri előtt stabilan és látványosan bemutatható legyen a valós emberi mozgás szimulációs utánzása.
+
+Friss Windows gépen a legegyszerűbb indítás:
+
+```powershell
+.\FIRST_RUN_WINDOWS.bat
+```
+
+Ez létrehozza a Python virtuális környezetet, telepíti a függőségeket, letölti a Unitree MuJoCo asseteket, majd lefuttat egy státuszellenőrzést.
+
+Ha a kameraállás változott, először kalibrálni kell:
+
+```powershell
+.\CALIBRATION_MENU.bat
+```
+
+A javasolt kalibrációs sorrend: régi képek törlése, új ChArUco képpárok felvétele, gyenge képek kiszűrése, majd stereo kalibráció számítása. A kalibráció azért fontos, mert a két kamera helyzete és látószöge gépenként és elhelyezésenként eltér.
+
+A demó indítása:
+
+```powershell
+.\START_DEMO.bat
+```
+
+A menüben az `1` a stabil, beadáshoz ajánlott kétkaros demó. A `2` a kísérleti teljes testes mód, amely guggolást, előre hajolást és alap lábmozgást próbál követni két kamera alapján.
+
+Ha valaki másik gépen tölti le a GitHub repót, nem kell VS Code-ot használnia. Elég a `FIRST_RUN_WINDOWS.bat`, majd szükség esetén a `CALIBRATION_MENU.bat` és végül a `START_DEMO.bat`. Más kamera esetén a kamera indexek és a kalibrációs fájl frissítése szükséges lehet.
+
+Fontos korlát: ez nem valódi robotvezérlés, hanem MuJoCo szimuláció. A retargeting közelítő geometriai számításokat használ, ezért zajos kamera, kitakarás vagy rossz kalibráció esetén a mozgás pontatlanabb lehet.
+
+## Részletes magyar magyarázat
+
+A rendszer három fő részből áll. Az első rész a kameraoldal: az OpenCV megnyitja a webkamerát vagy a videófájlt, a MediaPipe Pose pedig megkeresi az emberi testpontokat. A stabil beadási módban főleg a váll, könyök és csukló pontok fontosak, mert ezekből számoljuk a két kar mozgását. A kísérleti teljes testes módban a csípő, térd, boka és törzs pontok is bekerülnek a számításba.
+
+A második rész a retargeting. Ez azt jelenti, hogy az ember testpontjaiból robot ízületi célértékeket számolunk. Például a váll és könyök közti vektor adja a felkar irányát, a könyök és csukló közti vektor az alkar irányát, ezekből pedig közelítő váll- és könyökszögek számolhatók. A rendszer simítást és limitálást is használ, hogy a robotkar ne rángasson, és ne menjen irreális ízületi tartományba.
+
+A harmadik rész a MuJoCo szimuláció. A program betölti a Unitree G1 robot XML modelljét, megkeresi a konfigurációban megadott kar-, törzs- és lábízületeket, majd ezekhez beállítja a számolt célpozíciókat. Az MVP-ben ez direkt `qpos` vezérléssel történik, mert látványos és stabil bemutatót ad. Ez később lecserélhető lenne fizikai PD/actuator vezérlésre.
+
+A Unitree G1 assetek azért nincsenek közvetlenül a repóban, mert nagyok és külső forrásból származnak. A `FIRST_RUN_WINDOWS.bat` vagy a `DOWNLOAD_UNITREE_ASSETS.bat` letölti őket az `assets/unitree_mujoco` mappába. A GitHub repó így tiszta marad, de egy új gépen is automatikusan előkészíthető.
+
+A kalibráció csak a kétkamerás módhoz szükséges. Ilyenkor a ChArUco tábla alapján a program kiszámolja, hogyan helyezkedik el a laptopkamera és az USB kamera egymáshoz képest. Ez adja a mélységi információt. Ha a kamerákat elmozdítod, elforgatod, másik gépre dugod, vagy más kamerát használsz, új kalibráció javasolt.
+
+A beadáshoz a legbiztosabb indító a `START_DEMO.bat`, azon belül az `1` opció. Ez a stabil kétkaros verziót indítja. A `2` opció a teljes testes kísérleti verzió, ami látványosabb lehet, de érzékenyebb a kameraállásra és a teljes test láthatóságára.
+
+Az OpenClaw wrapper szerepe, hogy a projekt ne csak külön Python fájlokból álljon, hanem legyen egy egységes parancsrétege. A `src/openclaw_real2sim_tool.py` olyan parancsokat ad, mint a `status`, `run-demo`, `calibrate` és `record-demo`. Ezt egy külső command-wrapper rendszer, például OpenClaw, könnyen meg tudja hívni.
+
+Demo videóhoz érdemes egy képernyőfelvételt készíteni, ahol egyszerre látszik a kamera skeleton overlay és a MuJoCo G1 robot. A videóban mutasd meg a stabil kétkaros követést, majd opcionálisan a kísérleti teljes testes módot is. A dokumentációhoz készült magyar videószöveg a `docs/video_script_hu.txt` fájlban található.
+
+## Project Layout / Projekt felépítése
 
 ```text
 real2sim-g1/
@@ -71,11 +121,11 @@ real2sim-g1/
 `-- media/
 ```
 
-## Installation
+## Installation / Telepítés
 
 Use Python 3.10 or newer. Python 3.10/3.11 is recommended because MediaPipe wheels are usually easiest there.
 
-### Fresh Windows Clone
+### Fresh Windows Clone / Friss Windows letöltés
 
 After cloning or downloading the repository, run:
 
@@ -97,7 +147,7 @@ VS Code is optional. The project can be operated from PowerShell or by double-cl
 
 Important: a fresh clone still needs camera-specific stereo calibration. Run `CALIBRATION_MENU.bat` for the current camera placement before using the stereo demo on a different machine or after moving/rotating cameras.
 
-### Manual Setup
+### Manual Setup / Kézi telepítés
 
 ```bash
 cd real2sim-g1
@@ -113,7 +163,7 @@ On Linux/macOS, activate with:
 source .venv/bin/activate
 ```
 
-## Unitree G1 MuJoCo Model
+## Unitree G1 MuJoCo Model / Unitree G1 MuJoCo modell
 
 The Unitree G1 model is not vendored in this repository. Download it from Unitree's MuJoCo assets repository, then either place it at the default path or update the config.
 
@@ -159,7 +209,7 @@ The included joint names are common G1-style names, but model revisions can diff
 python scripts/print_g1_joints.py --model configs/g1_arm_mapping.yaml
 ```
 
-## Validation Commands
+## Validation Commands / Ellenőrző parancsok
 
 Check camera pose detection only:
 
@@ -206,7 +256,7 @@ ESC or q  quit
 c         recalibrate neutral pose from the current human pose
 ```
 
-## Submission Launchers
+## Submission Launchers / Beadási indítók
 
 For the competition demo, the project includes two Windows launchers:
 
@@ -229,7 +279,7 @@ The demo launcher has a custom ASCII console banner based on `logo.png`, with SZ
 
 VS Code is not required to run the demos. Open PowerShell in the project folder, or double-click the `.bat` files from Windows Explorer.
 
-## Recording A Demo
+## Recording A Demo / Demó videó rögzítése
 
 Record the camera pose overlay while the MuJoCo viewer is running:
 
@@ -239,7 +289,7 @@ python scripts/record_demo.py --config configs/g1_arm_mapping.yaml --camera 0 --
 
 The script records the camera/skeleton overlay. For a polished competition video, record the desktop with the camera window and MuJoCo viewer side by side.
 
-## OpenClaw Wrapper
+## OpenClaw Wrapper / OpenClaw parancsréteg
 
 `src/openclaw_real2sim_tool.py` is a minimal OpenClaw-compatible command wrapper. It exposes stable commands that call the underlying Python app:
 
@@ -259,7 +309,7 @@ start | calibrate | status | run-demo | record-demo
 
 The `status` command checks Python package availability, the config file, the configured G1 XML path, and the configured camera.
 
-## Optional Stereo ChArUco Calibration
+## Optional Stereo ChArUco Calibration / Opcionális stereo ChArUco kalibráció
 
 If two cameras are available, use the laptop camera as `0` and the USB camera as `1`. Camera `2` can be ignored if it is only a duplicate of the USB feed.
 
@@ -373,7 +423,7 @@ This is visual root motion only: small stepping, weight shift, and turning. It i
 
 Use `--display-scale 0.5` or `--display-scale 0.6` on a single monitor if the camera preview covers the MuJoCo window.
 
-## Configuration
+## Configuration / Konfiguráció
 
 Main config:
 
@@ -404,7 +454,7 @@ joint_mapping:
 If the robot moves in the opposite direction for one joint, adjust the `retargeting.signs` or `retargeting.offsets` values.
 Use `retargeting.scales` to reduce overly large motions without changing the underlying pose geometry.
 
-## Known Limitations
+## Known Limitations / Ismert korlátok
 
 - Arm retargeting is approximate and uses simple geometric angles.
 - Single-camera pose estimation is noisy and can fail under occlusion.
@@ -415,6 +465,6 @@ Use `retargeting.scales` to reduce overly large motions without changing the und
 
 More detail is in [docs/limitations.md](docs/limitations.md).
 
-## License
+## License / Licenc
 
 This repository includes a Creative Commons Attribution 4.0 International license notice in [LICENSE](LICENSE), as requested by the competition. Documentation, diagrams, and demo materials are intended to be CC BY 4.0 licensed. Creative Commons is not the usual first choice for source code licensing, but the project is marked this way to satisfy the competition deliverable.
