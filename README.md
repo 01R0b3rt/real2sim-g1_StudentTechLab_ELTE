@@ -1,6 +1,41 @@
-# Real2Sim G1 Arm Imitation MVP
+# Real2Sim G1 - StudentTechLab ELTE
 
-This project is a practical MVP for a real-to-simulation competition pipeline:
+```text
+===============================================================================
+ REAL2SIM G1                                             SZTAKI / TTAH 2026
+===============================================================================
+
+                                 ####
+                             ##########
+                         ###############          #######
+                     ###############          #############
+                 ###############          #####################
+                ##########          #############     #########
+                #######        #############             ######
+                #######      ###########                 ######
+                #######      #######          ######     ######
+                #######                    #########     ######
+                #######               #############      ######
+                #########       #############          ########
+                ########################          #############
+                    ################          #############
+                         #######          #############
+                            #          ###########
+                                      #######
+
+                             STUDENT TECH LAB ELTE
+
+                   Camera -> MediaPipe -> MuJoCo Unitree G1
+===============================================================================
+```
+
+## Project Purpose / Projekt célja
+
+This project is a practical MVP for a real-to-simulation competition pipeline. A camera observes human motion, MediaPipe extracts body landmarks, and a Unitree G1 humanoid model in MuJoCo imitates the detected movement. The stable submission mode focuses on robust two-arm imitation; the repository also includes an experimental stereo full-body mode for squatting, leaning, and basic leg motion.
+
+Ez a projekt egy gyakorlati MVP egy real-to-simulation versenyfeladathoz. A rendszer kameraképből felismeri az emberi testpontokat, a karok és a test mozgását egyszerű retargeting logikával robot ízületi célokra képezi le, majd a Unitree G1 humanoid modellt MuJoCo szimulátorban mozgatja. A beadáshoz használható stabil verzió a kétkaros utánzást helyezi előtérbe; emellett készült egy kísérleti kétkamerás teljes testes mód is guggolásra, előre hajolásra és alap lábmozgásra.
+
+The main pipeline is:
 
 ```text
 webcam or video
@@ -13,7 +48,7 @@ webcam or video
   -> OpenClaw-compatible command wrapper
 ```
 
-The goal is visible two-arm imitation, not perfect humanoid whole-body control. The MVP tracks both human arms, computes approximate shoulder pitch, shoulder roll, and elbow flexion, then applies those targets to a Unitree G1 MuJoCo model.
+The goal is visible, demonstrable imitation, not perfect humanoid whole-body control. The MVP tracks both human arms, computes approximate shoulder pitch, shoulder roll, and elbow flexion, then applies those targets to a Unitree G1 MuJoCo model.
 
 ## Project Layout
 
@@ -383,16 +418,3 @@ More detail is in [docs/limitations.md](docs/limitations.md).
 ## License
 
 This repository includes a Creative Commons Attribution 4.0 International license notice in [LICENSE](LICENSE), as requested by the competition. Documentation, diagrams, and demo materials are intended to be CC BY 4.0 licensed. Creative Commons is not the usual first choice for source code licensing, but the project is marked this way to satisfy the competition deliverable.
-
-## Competition Checklist
-
-- [ ] Camera detects human upper body
-- [ ] Both arms are tracked
-- [ ] Unitree G1 model loads in MuJoCo
-- [ ] Robot left arm follows human left arm
-- [ ] Robot right arm follows human right arm
-- [ ] OpenClaw wrapper command exists
-- [ ] Demo video recorded
-- [ ] Public GitHub repository created
-- [ ] CC license notice included
-- [ ] Email submission prepared
