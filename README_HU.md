@@ -391,6 +391,8 @@ Részletesebb lista: [docs/limitations.md](docs/limitations.md).
 
 ## Szerző
 
+Dallos Ákos Benedek
+
 StudentTechLab ELTE
 
 GitHub: [01R0b3rt](https://github.com/01R0b3rt)

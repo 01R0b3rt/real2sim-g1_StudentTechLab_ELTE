@@ -381,6 +381,8 @@ More detail is available in [docs/limitations.md](docs/limitations.md).
 
 ## Author
 
+Dallos Ákos Benedek
+
 StudentTechLab ELTE
 
 GitHub: [01R0b3rt](https://github.com/01R0b3rt)
