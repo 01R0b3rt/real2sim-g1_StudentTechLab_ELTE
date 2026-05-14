@@ -1,0 +1,34 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+logs/
+*.log
+MUJOCO_LOG.TXT
+
+# Local robot assets can be large and are usually cloned/downloaded separately.
+assets/
+
+# Demo captures can be regenerated.
+media/*.mp4
+media/*.avi
+media/*.mov
+media/*.mkv
+media/debug_*/
+media/debug*.png
+media/video_review_frames*/
+media/g1_elbow_probe/
+!media/.gitkeep
+
+# Calibration captures can be regenerated and may contain camera imagery.
+data/
+
+# Local editor/system files.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

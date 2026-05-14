@@ -1,0 +1,151 @@
+model:
+  # Clone or copy Unitree's MuJoCo assets into this path, or override with
+  # --model-xml. See README.md for setup instructions.
+  xml_path: "assets/unitree_mujoco/unitree_robots/g1/scene.xml"
+
+camera:
+  source: 0
+  # Keep this at the same resolution used for stereo calibration.
+  width: 640
+  height: 480
+  backend: "auto"
+
+stereo:
+  enabled: false
+  calibration_path: "configs/stereo_calibration.yaml"
+  left_camera: 0
+  right_camera: 1
+  backend: "dshow"
+  left_rotation: "none"
+  right_rotation: "cw"
+
+retargeting:
+  smoothing_alpha: 0.25
+  confidence_threshold: 0.45
+  lower_body_confidence_threshold: 0.2
+  use_neutral_calibration: true
+
+  # Sign/offset corrections are intentionally configurable because Unitree G1
+  # joint conventions can differ across model revisions.
+  signs:
+    left_shoulder_pitch: 1.0
+    left_shoulder_roll: -1.0
+    left_elbow: -1.0
+    right_shoulder_pitch: 1.0
+    right_shoulder_roll: -1.0
+    right_elbow: -1.0
+    waist_yaw: 1.0
+    waist_roll: 1.0
+    # With front-facing stereo cameras, leaning forward usually moves shoulders
+    # closer to the cameras, so the raw camera-space pitch has the opposite sign
+    # of the G1 waist pitch joint.
+    waist_pitch: -1.0
+    left_hip_pitch: 1.0
+    left_hip_roll: -1.0
+    left_knee: 1.0
+    right_hip_pitch: 1.0
+    right_hip_roll: -1.0
+    right_knee: 1.0
+    base_x: 1.0
+    base_y: 1.0
+    base_z: 1.0
+    base_yaw: 1.0
+  scales:
+    left_shoulder_pitch: 0.75
+    left_shoulder_roll: 1.05
+    left_elbow: 1.15
+    right_shoulder_pitch: 0.75
+    right_shoulder_roll: 1.05
+    right_elbow: 1.15
+    waist_yaw: 0.45
+    waist_roll: 0.45
+    waist_pitch: 0.95
+    # Raw leg landmarks stay active, but squat_assist below keeps crouches from
+    # becoming a one-sided lunge when knee/ankle points are noisy.
+    left_hip_pitch: 0.42
+    left_hip_roll: 0.16
+    left_knee: 0.78
+    right_hip_pitch: 0.42
+    right_hip_roll: 0.16
+    right_knee: 0.78
+    base_x: 0.55
+    base_y: 0.45
+    base_z: 0.65
+    base_yaw: 0.75
+  offsets:
+    # Small shoulder offsets make the G1 start with arms lower after human
+    # neutral-pose calibration. Tune in 0.05-0.10 rad steps if needed.
+    left_shoulder_pitch: -0.05
+    left_shoulder_roll: 0.0
+    # In the Unitree G1 model, a visually straighter elbow is a positive qpos.
+    # Human elbow flexion is then subtracted from this rest value via sign=-1.
+    left_elbow: 1.55
+    right_shoulder_pitch: -0.25
+    right_shoulder_roll: 0.0
+    right_elbow: 1.55
+    waist_yaw: 0.0
+    waist_roll: 0.0
+    waist_pitch: 0.0
+    left_hip_pitch: 0.0
+    left_hip_roll: 0.0
+    left_knee: 0.0
+    right_hip_pitch: 0.0
+    right_hip_roll: 0.0
+    right_knee: 0.0
+    base_x: 0.0
+    base_y: 0.0
+    base_z: 0.0
+    base_yaw: 0.0
+
+  # Extra visual help for squats. The raw lower-body landmarks are noisy, so
+  # pelvis drop from the calibrated standing pose adds direct robot crouch.
+  squat_assist:
+    enabled: true
+    min_pelvis_drop: 0.04
+    full_pelvis_drop: 0.32
+    knee_add: 1.00
+    hip_pitch_add: -0.58
+    waist_pitch_add: 0.05
+    base_z_add: -0.06
+    hip_roll_damping: 0.65
+
+joint_limits:
+  base_x: [-0.45, 0.45]
+  base_y: [-0.35, 0.35]
+  base_z: [-0.28, 0.15]
+  base_yaw: [-0.75, 0.75]
+  waist_yaw: [-0.7, 0.7]
+  waist_roll: [-0.35, 0.35]
+  waist_pitch: [-0.52, 0.52]
+  left_hip_pitch: [-1.2, 1.0]
+  left_hip_roll: [-0.32, 0.45]
+  left_knee: [0.0, 2.05]
+  right_hip_pitch: [-1.2, 1.0]
+  right_hip_roll: [-0.45, 0.32]
+  right_knee: [0.0, 2.05]
+  left_shoulder_pitch: [-2.0, 2.0]
+  left_shoulder_roll: [-1.5, 2.1]
+  left_elbow: [-1.0, 2.1]
+  right_shoulder_pitch: [-2.0, 2.0]
+  right_shoulder_roll: [-2.1, 1.5]
+  right_elbow: [-1.0, 2.1]
+
+joint_mapping:
+  # These are common G1-style joint names. Run
+  # python scripts/print_g1_joints.py --model configs/g1_arm_mapping.yaml
+  # and adjust this section if your downloaded XML uses different names.
+  left_shoulder_pitch: "left_shoulder_pitch_joint"
+  left_shoulder_roll: "left_shoulder_roll_joint"
+  left_elbow: "left_elbow_joint"
+  right_shoulder_pitch: "right_shoulder_pitch_joint"
+  right_shoulder_roll: "right_shoulder_roll_joint"
+  right_elbow: "right_elbow_joint"
+  waist_yaw: "waist_yaw_joint"
+  waist_roll: "waist_roll_joint"
+  waist_pitch: "waist_pitch_joint"
+  left_hip_pitch: "left_hip_pitch_joint"
+  left_hip_roll: "left_hip_roll_joint"
+  left_knee: "left_knee_joint"
+  right_hip_pitch: "right_hip_pitch_joint"
+  right_hip_roll: "right_hip_roll_joint"
+  right_knee: "right_knee_joint"

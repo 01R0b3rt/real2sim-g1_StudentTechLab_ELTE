@@ -1,0 +1,262 @@
+REAL2SIM G1 DEMO VIDEO SZKRIPT
+SZTAKI / TTAH 2026
+
+Javasolt videohossz: 2:30 - 3:30 perc
+Javasolt fajlnev: real2sim_g1_demo_TTAH2026.mp4
+
+Cel:
+Egyetlen osszevagott demo video, amely eloszor a stabil ketkaros beadando megoldast mutatja, utana roviden a teljes testes kiserleti bovitest.
+
+
+1. MIT KER A FELADAT?
+
+A videoban latszodjon vagy hangozzon el roviden:
+
+- Kamera figyeli az emberi mozgast.
+- A rendszer kinyeri az emberi kar poziciojat.
+- Legalabb mindket kar mozgasanak utanasa kotelezo.
+- MuJoCo szimulatort kell hasznalni.
+- Unitree G1 humanoid robotmodellt kell hasznalni.
+- OpenClaw-kompatibilis felulet vagy parancs-wrapper kell.
+- Kell dokumentacio.
+- Kell demo video.
+- Kell publikus GitHub repository.
+- Kell Creative Commons license notice.
+
+Fontos pozicionalas:
+A stabil, beadando fo eredmeny a ketkaros imitacio.
+A teljes test verzio extra kiserleti bovites, nem erre kell epiteni a teljes bizonyitast.
+
+
+2. VIDEO STRUKTURA
+
+0:00 - 0:10
+Cim / nyito kep
+
+Kepernyon:
+Real2Sim G1
+Camera-based human arm imitation in MuJoCo
+SZTAKI / TTAH 2026
+Student Tech Lab ELTE
+
+Narracio:
+"Ebben a projektben egy kameraalapu real2sim rendszert mutatunk be. A cel, hogy az emberi karok mozgasa egy Unitree G1 humanoid robotmodellen jelenjen meg MuJoCo szimulacioban."
+
+
+0:10 - 0:25
+Feladat kovetelmenyek roviden
+
+Kepernyon lehet README / projektmappa / indito menu.
+
+Narracio:
+"A feladat minimum kovetelmenye mindket kar kovetese. A rendszer Pythonban keszult, OpenCV es MediaPipe Pose segitsegevel detektalja a testpontokat, MuJoCo-ban tolti be a Unitree G1 modellt, es OpenClaw-kompatibilis parancs-wrapperen keresztul indithato."
+
+
+0:25 - 0:40
+Pipeline bemutatasa
+
+Kepernyon:
+Mutasd a PPT vagy README pipeline reszet, vagy gyorsan a projekt fajlstrukturat.
+
+Mondhato szoveg:
+"A pipeline: kamera vagy video input, OpenCV frame capture, MediaPipe Pose landmark detection, vall-konyok-csuklo pontok kinyerese, retargeting emberi karvektorokbol robot izuleti celokra, majd MuJoCo G1 megjelenites."
+
+Kepernyo felirat:
+camera -> MediaPipe -> retargeting -> Unitree G1 in MuJoCo
+
+
+0:40 - 0:55
+Inditas / OpenClaw wrapper
+
+Kepernyon:
+Nyisd meg:
+.\START_DEMO.bat
+
+Mutasd a custom ASCII menut.
+
+Narracio:
+"A demo nem VS Code-hoz kotott. A felhasznaloi inditas batch fajlokkal tortenik. A START_DEMO menu ket modot ad: a stabil ketkaros beadando verziot es a kiserleti teljes test verziot. A hatterben ezek az OpenClaw-kompatibilis Python wrapper parancsot hivjak."
+
+Kepernyo felirat:
+OpenClaw-compatible CLI wrapper
+
+
+0:55 - 1:55
+Fo demo: stabil ketkaros megoldas
+
+Inditsd:
+START_DEMO.bat -> 1
+vagy:
+START_ARMS_ONLY.bat
+
+Kepernyon egyszerre latszodjon:
+- MuJoCo G1 viewer
+- kamera debug ablak skeleton overlayjel
+
+Mozdulat sorrend:
+1. allj neutral pozban
+2. nyomj c-t vagy varj kalibraciora
+3. karok leengedve
+4. T-pose / karok oldalra
+5. bal kar kulon mozgatasa
+6. jobb kar kulon mozgatasa
+7. konyokhajlitas mindket oldalon
+8. karok elore / oldalra
+9. rovid occlusion vagy tracking kieses, ha stabil marad
+
+Narracio:
+"Ez a stabil beadando mod. A rendszer mindket kart koveti: vall pitch, vall roll es konyokhajlitas becsles tortenik. Ha a pose detection rovid idore bizonytalan, a robot nem omlik ossze, hanem tartja az elozo stabil targetet."
+
+Fontos:
+Itt legyen a legszebb, legstabilabb resz. Ne siess. A video nagy resze ez legyen.
+
+
+1:55 - 2:15
+Rovid technikai kodreszlet / logika
+
+Kepernyon:
+Mutasd roviden a fajlokat:
+src/camera_pose.py
+src/retarget.py
+src/mujoco_g1.py
+src/openclaw_real2sim_tool.py
+
+Narracio:
+"A camera_pose modul olvassa a kamerat es MediaPipe landmarkokat ad. A retarget modul torzs koordinatarendszert epit, majd a felkar es alkar vektorabol szamolja a vall es konyok celokat. A mujoco_g1 modul ezeket a Unitree G1 megfelelo joint qpos ertekeire irja."
+
+Kepernyo felirat:
+shoulder / elbow / wrist -> arm vectors -> G1 joint targets
+
+
+2:15 - 2:55
+Extra demo: teljes test kiserleti verzio
+
+Inditsd:
+START_DEMO.bat -> 2
+vagy:
+START_FULL_BODY.bat
+
+Mutasd roviden:
+- elorehajlas
+- guggolas
+- enyhe torzs/lab mozgatas
+
+Narracio:
+"A stabil ketkaros mod melle keszult egy kiserleti teljes test bovites is. Ez stereo kamerat hasznal, a csipo, terd es boka pontokat is figyeli, es probal torzs- illetve labmozgast retargetelni. Ez meg nem teljes humanoid balansz-kontroller, hanem vizualis real2sim kiserlet."
+
+Fontos:
+Ne mondd, hogy tokeletes full-body control.
+Mondd azt, hogy experimental extension.
+
+
+2:55 - 3:10
+Kalibracio / ket kamera roviden
+
+Kepernyon:
+CALIBRATION_MENU.bat custom menu
+
+Narracio:
+"Ket kameraval ChArUco kalibraciot hasznalunk. A menuben torolhetoek a regi kalibracios kepek, felvehetok uj kepparok, kiszurhetoek a 12 sarok alatti gyenge parok, majd lefuttathato a stereo kalibracio."
+
+Kepernyo felirat:
+1 clean old images
+2 capture ChArUco pairs
+3 filter weak pairs
+4 compute stereo calibration
+
+
+3:10 - 3:25
+GitHub / dokumentacio / license
+
+Kepernyon:
+README.md, LICENSE, docs mappa, GitHub repo oldal ha mar fent van.
+
+Narracio:
+"A projekt tartalmazza a forraskodot, a konfiguraciokat, a dokumentaciot, a demo instrukciokat es a Creative Commons license notice-t. Friss Windows klon eseten a FIRST_RUN_WINDOWS batch fajl letrehozza a virtualis kornyezetet, telepiti a dependencyket es letolti a Unitree MuJoCo asseteket."
+
+Kepernyo felirat:
+README + docs + LICENSE + FIRST_RUN_WINDOWS.bat
+
+
+3:25 - 3:35
+Zaro mondat
+
+Narracio:
+"A projekt teljesiti a minimum kovetelmenyt: kameraalapu ketkaros emberi mozgaskovetes Unitree G1 modellen MuJoCo-ban. A teljes test es stereo bovites megmutatja a tovabbfejlesztesi iranyt."
+
+Kepernyo felirat:
+Stable submission: two-arm imitation
+Experimental extension: stereo full-body retargeting
+
+
+3. MIT MUTASS MINDENKEPP?
+
+Kotelezo / nagyon ajanlott:
+
+- Kamera debug ablak skeleton overlayjel.
+- MuJoCo G1 viewer.
+- Mindket kar kovetese.
+- Konyokhajlitas.
+- OpenClaw / START_DEMO inditas.
+- README / docs / LICENSE.
+- GitHub repo.
+
+Extra:
+
+- ChArUco kalibracios menu.
+- Teljes test kiserleti mod.
+- Guggolas es elorehajlas.
+
+
+4. MIT NE ALLITS TUL EROSEN?
+
+Keruld ezeket:
+
+- "Tokeletes full-body humanoid controller."
+- "Valodi roboton is azonnal mukodik."
+- "Fizikailag pontos balansz-kontroll."
+
+Helyette:
+
+- "Robusztus MVP."
+- "Vizualis real2sim imitacio."
+- "Stabil ketkaros beadando mod."
+- "Kiserleti full-body extension."
+
+
+5. FELVETELI TIPPEK
+
+- A kamera debug ablak legyen kicsi, de olvashato.
+- A MuJoCo viewer legyen nagyobb, ez a latvany.
+- A mozdulatokat lassan csinald.
+- Eloszor mindig neutral poz.
+- Ha stereo/full-body instabil, ne eroltesd hosszan, csak rovid extra resz legyen.
+- A stabil ketkaros demo legyen a video kozepe es legerosebb resze.
+
+
+6. VIDEOHOZ HASZNALHATO ROVID LEIRAS
+
+Title:
+Real2Sim G1 - Camera-based two-arm imitation in MuJoCo
+
+Description:
+This project demonstrates a Python real2sim MVP for the SZTAKI / TTAH 2026 task. A camera observes human motion, MediaPipe extracts pose landmarks, an approximate retargeting module maps human arm motion to a Unitree G1 MuJoCo model, and an OpenClaw-compatible command wrapper exposes demo commands. The stable submission mode imitates both human arms. An experimental stereo full-body extension demonstrates torso, squat, and leg motion.
+
+
+7. GYORS PARANCSSOROK A VIDEOHOZ
+
+Elso telepites masik gepen:
+.\FIRST_RUN_WINDOWS.bat
+
+Kalibracio:
+.\CALIBRATION_MENU.bat
+
+Demo:
+.\START_DEMO.bat
+
+Stabil ketkaros demo:
+.\START_ARMS_ONLY.bat
+
+Teljes test kiserleti demo:
+.\START_FULL_BODY.bat
+

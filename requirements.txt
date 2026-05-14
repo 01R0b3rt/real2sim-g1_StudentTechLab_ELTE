@@ -1,0 +1,8 @@
+numpy>=1.23,<2.0
+opencv-contrib-python>=4.8,<4.12
+mediapipe==0.10.21
+mujoco>=3.2
+PyYAML>=6.0
+
+# Optional, useful for offline debugging plots only.
+matplotlib>=3.7
