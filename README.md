@@ -220,9 +220,55 @@ python src/openclaw_real2sim_tool.py record-demo --camera 0 --output media/demo_
 
 The `status` command checks Python package availability, the config file, the configured G1 XML path, and the configured camera.
 
+## Camera Selection And Setup
+
+If a different camera is connected, first check which camera indices are available:
+
+```bash
+python scripts/preview_cameras.py --cameras 0 1 2 --backend dshow
+```
+
+Use the preview windows to identify each camera. A typical Windows setup is:
+
+```text
+0  built-in laptop camera
+1  USB camera
+2  often the same USB camera through another backend
+```
+
+If a camera does not produce frames, try another index or omit the `--backend dshow` option. Camera indices can change between computers, so a different laptop may need a different setup.
+
+For the stable one-camera two-arm demo, the camera can be selected from the command line:
+
+```bash
+python src/openclaw_real2sim_tool.py run-demo --camera 1
+```
+
+Or it can be set in the main config:
+
+```yaml
+camera:
+  source: 1
+  width: 640
+  height: 480
+```
+
+For the two-camera mode, set the left and right cameras in the `stereo` section:
+
+```yaml
+stereo:
+  left_camera: 0
+  right_camera: 1
+  backend: "dshow"
+  left_rotation: "none"
+  right_rotation: "cw"
+```
+
+If the USB camera is rotated, set `right_rotation` to `cw`, `ccw`, `180`, or `none`. If cameras are moved, rotated, replaced, or connected to another computer, run a fresh stereo calibration before using the full-body mode.
+
 ## Stereo ChArUco Calibration
 
-Stereo calibration is only needed for the two-camera/full-body mode. If the cameras are moved, rotated, replaced, or connected to a different computer, run a new calibration.
+Stereo calibration is only needed for the two-camera/full-body mode. The ChArUco board lets the program estimate the relative position of the laptop camera and USB camera, which provides usable depth information for full-body tracking.
 
 Windows menu:
 
@@ -239,6 +285,16 @@ Recommended flow:
 4  Compute stereo calibration
 5  Exit
 ```
+
+Practical calibration flow:
+
+1. Clear old calibration images so captures from different camera placements do not mix.
+2. Start ChArUco stereo image capture.
+3. Move the printed ChArUco board around the shared field of view.
+4. Press `Space` only when both camera previews show `READY`.
+5. Capture about 20-30 image pairs from different distances and angles.
+6. Run the weak-pair filter. Pairs with fewer than 12 detected corners on either side should be removed.
+7. Run stereo calibration. The result is saved to `configs/stereo_calibration.yaml`.
 
 Preview cameras:
 
@@ -269,16 +325,6 @@ Run the experimental stereo full-body demo:
 ```bash
 python src/openclaw_real2sim_tool.py run-demo --stereo --full-body --locomotion-demo --stereo-config configs/stereo_calibration.yaml --left-camera 0 --right-camera 1 --display-scale 0.5
 ```
-
-## Demo Recording
-
-Record the camera pose overlay while MuJoCo is running:
-
-```bash
-python scripts/record_demo.py --config configs/g1_arm_mapping.yaml --camera 0 --output media/demo_output.mp4
-```
-
-For a polished competition video, record the desktop with the camera/skeleton window and the MuJoCo viewer visible side by side.
 
 ## Configuration
 

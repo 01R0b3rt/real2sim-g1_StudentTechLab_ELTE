@@ -230,9 +230,55 @@ python src/openclaw_real2sim_tool.py record-demo --camera 0 --output media/demo_
 
 A `status` parancs ellenőrzi a Python csomagokat, a config fájlt, a G1 XML útvonalat és a kamerát.
 
+## Kamera keresése és beállítása
+
+Ha másik kamerát használsz, vagy nem a laptop beépített kameráját szeretnéd használni, először nézd meg, milyen kamera indexeket lát a gép:
+
+```bash
+python scripts/preview_cameras.py --cameras 0 1 2 --backend dshow
+```
+
+A megjelenő ablakok alapján jegyezd fel, melyik index melyik kamera. Tipikus Windows beállítás:
+
+```text
+0  laptop beépített kamera
+1  USB kamera
+2  gyakran ugyanaz az USB kamera másik backenddel
+```
+
+Ha egy kamera nem ad képet, próbáld meg másik indexszel, vagy hagyd el a `--backend dshow` részt. A kamera indexek gépenként változhatnak, ezért másik laptopon nem biztos, hogy ugyanaz lesz a jó beállítás.
+
+Egykamerás, stabil kétkaros demónál a kiválasztott kamera parancsból is megadható:
+
+```bash
+python src/openclaw_real2sim_tool.py run-demo --camera 1
+```
+
+Vagy átírható a fő configban:
+
+```yaml
+camera:
+  source: 1
+  width: 640
+  height: 480
+```
+
+Kétkamerás módban a `stereo` részben kell beállítani a bal és jobb kamerát:
+
+```yaml
+stereo:
+  left_camera: 0
+  right_camera: 1
+  backend: "dshow"
+  left_rotation: "none"
+  right_rotation: "cw"
+```
+
+Ha az USB kamera el van fordítva, a `right_rotation` értéke lehet például `cw`, `ccw`, `180` vagy `none`. Kamera csere, kamera mozgatás, elforgatás vagy másik gép használata után a kétkamerás módhoz új stereo kalibráció ajánlott.
+
 ## Stereo ChArUco kalibráció
 
-A stereo kalibráció csak a kétkamerás/teljes testes módhoz szükséges. Ha a kamerákat elmozdítod, elforgatod, másik gépre dugod, vagy más kamerát használsz, új kalibráció ajánlott.
+A stereo kalibráció csak a kétkamerás/teljes testes módhoz szükséges. A ChArUco tábla segítségével a program kiszámolja, hogyan helyezkedik el egymáshoz képest a laptopkamera és az USB kamera. Ebből lesz használható mélységi információ a teljes testes követéshez.
 
 Windows menü:
 
@@ -249,6 +295,16 @@ Javasolt sorrend:
 4  Stereo kalibráció számítása
 5  Kilépés
 ```
+
+A kalibráció gyakorlati menete:
+
+1. Töröld a régi kalibrációs képeket, hogy ne keveredjenek az új kameraállással készült képekkel.
+2. Indítsd a ChArUco képpárfelvételt.
+3. Mozgasd a kinyomtatott ChArUco táblát a két kamera közös látóterében.
+4. Akkor nyomj `Space`-t, amikor mindkét kamera `READY` állapotot mutat.
+5. Vegyél fel nagyjából 20-30 képpárt több különböző távolságból és szögből.
+6. Futtasd a gyenge képpárok törlését. A 12 sarok alatti képeket érdemes kidobni, mert rontják a kalibrációt.
+7. Futtasd a stereo kalibráció számítását. Az eredmény ide mentődik: `configs/stereo_calibration.yaml`.
 
 Kamerák előnézete:
 
@@ -278,22 +334,6 @@ Kísérleti teljes testes stereo demó:
 
 ```bash
 python src/openclaw_real2sim_tool.py run-demo --stereo --full-body --locomotion-demo --stereo-config configs/stereo_calibration.yaml --left-camera 0 --right-camera 1 --display-scale 0.5
-```
-
-## Demó videó rögzítése
-
-Kamera skeleton overlay rögzítése MuJoCo futás közben:
-
-```bash
-python scripts/record_demo.py --config configs/g1_arm_mapping.yaml --camera 0 --output media/demo_output.mp4
-```
-
-Beadáshoz érdemes képernyőfelvételt készíteni, ahol egyszerre látszik a kamera/skeleton ablak és a MuJoCo G1 robot.
-
-A magyar videószöveg itt található:
-
-```text
-docs/video_script_hu.txt
 ```
 
 ## Konfiguráció
